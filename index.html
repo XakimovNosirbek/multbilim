@@ -149,7 +149,7 @@ button{font:inherit;color:inherit}
 .dots{display:flex;gap:6px;margin-left:auto}
 .dots button{width:24px;height:24px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center;
   transition:width .35s cubic-bezier(.2,.8,.3,1)}
-.dots button::after{content:"";display:block;width:100%;height:3px;border-radius:2px;background:rgba(255,255,255,.32);transition:background .25s}
+.dots button::after{content:"";display:block;width:100%;height:3px;border-radius:2px;background:rgba(255,255,255,.44);transition:background .25s}
 .dots button[aria-current="true"]{width:38px}
 .dots button[aria-current="true"]::after{background:var(--gold)}
 
@@ -353,7 +353,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 46px;color:var(--muted)}
 .pd-hi h2{font-size:clamp(32px,6.6vw,84px);color:#fff;margin-top:12px}
 .pd-hi .tag{color:rgba(255,255,255,.8);font-size:clamp(14px,1.6vw,19px);margin-top:10px}
 .pd-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.pd-meta span{padding:6px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.24);color:#fff;font-size:11px}
+.pd-meta span{padding:6px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.36);color:#fff;font-size:11px}
 .pd-body{max-width:1160px;margin:0 auto;padding:clamp(32px,5vw,60px) clamp(18px,4vw,44px) clamp(56px,8vw,110px);display:grid;gap:clamp(34px,5vw,64px)}
 .pd-sec{display:grid;gap:16px}
 .pd-sec > h3{font-size:clamp(18px,2.1vw,25px);display:flex;align-items:center;gap:14px}
@@ -452,11 +452,11 @@ footer{border-top:1px solid var(--line);padding:44px 0 46px;color:var(--muted)}
 <section class="hero" id="top">
   <div class="hero-bg" id="slides" aria-hidden="true">
     <div class="on" style="background-image:url(img/cov-alpomish.jpg)"></div>
-    <div style="background-image:url(img/cov-ikkidunyo.jpg)"></div>
-    <div style="background-image:url(img/cov-zij.jpg)"></div>
-    <div style="background-image:url(img/cov-megavoylar.jpg)"></div>
-    <div style="background-image:url(img/cov-qalpoqcha.jpg)"></div>
-    <div style="background-image:url(img/cov-mevacheva.jpg)"></div>
+    <div data-bg="img/cov-ikkidunyo.jpg"></div>
+    <div data-bg="img/cov-zij.jpg"></div>
+    <div data-bg="img/cov-megavoylar.jpg"></div>
+    <div data-bg="img/cov-qalpoqcha.jpg"></div>
+    <div data-bg="img/cov-mevacheva.jpg"></div>
   </div>
   <div class="wrap">
     <h1><span>O'zbekistonda</span><span>yaratilgan</span><span>olamlar.</span></h1>
@@ -666,11 +666,11 @@ footer{border-top:1px solid var(--line);padding:44px 0 46px;color:var(--muted)}
       <p class="lede">Vakansiyalar hozircha namunaviy. Portfolio va fikrlash usuli tajriba yillaridan ham muhimroq.</p>
     </div>
     <div class="rows rv">
-      <a class="row" href="#aloqa"><span class="k">Animatsiya</span><div><h4>3D animator</h4><p>Toshkent · To'liq kun · 2+ yil tajriba</p></div><span class="go">Ariza yuborish &#8599;</span></a>
-      <a class="row" href="#aloqa"><span class="k">Dizayn</span><div><h4>Fon rassomi</h4><p>Toshkent yoki masofadan · To'liq kun</p></div><span class="go">Ariza yuborish &#8599;</span></a>
-      <a class="row" href="#aloqa"><span class="k">Hikoya</span><div><h4>Storibord rassomi</h4><p>Loyiha asosida · Kuchli portfolio</p></div><span class="go">Ariza yuborish &#8599;</span></a>
-      <a class="row" href="#aloqa"><span class="k">Ovoz</span><div><h4>Ovoz dizayneri</h4><p>Toshkent · Yarim kun</p></div><span class="go">Ariza yuborish &#8599;</span></a>
-      <a class="row" href="#aloqa"><span class="k">Amaliyot</span><div><h4>Yozgi amaliyot dasturi</h4><p>Talabalar uchun 3 oy · Namunaviy e'lon</p></div><span class="go">Ariza yuborish &#8599;</span></a>
+      <a class="row" href="#aloqa"><span class="k">Animatsiya</span><div><h4>3D animator</h4><p>Toshkent · To'liq kun · 2+ yil tajriba</p></div><span class="go">Ariza yuborish &#8594;</span></a>
+      <a class="row" href="#aloqa"><span class="k">Dizayn</span><div><h4>Fon rassomi</h4><p>Toshkent yoki masofadan · To'liq kun</p></div><span class="go">Ariza yuborish &#8594;</span></a>
+      <a class="row" href="#aloqa"><span class="k">Hikoya</span><div><h4>Storibord rassomi</h4><p>Loyiha asosida · Kuchli portfolio</p></div><span class="go">Ariza yuborish &#8594;</span></a>
+      <a class="row" href="#aloqa"><span class="k">Ovoz</span><div><h4>Ovoz dizayneri</h4><p>Toshkent · Yarim kun</p></div><span class="go">Ariza yuborish &#8594;</span></a>
+      <a class="row" href="#aloqa"><span class="k">Amaliyot</span><div><h4>Yozgi amaliyot dasturi</h4><p>Talabalar uchun 3 oy · Namunaviy e'lon</p></div><span class="go">Ariza yuborish &#8594;</span></a>
     </div>
   </div>
 </section>
@@ -899,7 +899,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 46px;color:var(--muted)}
   </div>
 </div>
 
-<div class="lb" id="lb" aria-hidden="true">
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Rasm ko'rgich" aria-hidden="true">
   <div class="lb-b" data-lbclose></div>
   <div class="lb-f"><img id="lbi" alt=""></div>
   <p class="lb-c" id="lbc"></p>
@@ -938,6 +938,15 @@ footer{border-top:1px solid var(--line);padding:44px 0 46px;color:var(--muted)}
   else{var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.05});
     rv.forEach(function(e){io.observe(e);});}
 
+  function heroLazy(){
+    document.querySelectorAll('#slides div[data-bg]').forEach(function(d){
+      d.style.backgroundImage='url('+d.getAttribute('data-bg')+')';
+      d.removeAttribute('data-bg');
+    });
+  }
+  if(document.readyState==='complete') heroLazy();
+  else window.addEventListener('load',heroLazy);
+
   var sl=[].slice.call(document.querySelectorAll('#slides div')),
       names=['Alpomish','Ikki Dunyo','Zij','Megavoylar','Sehrli Qalpoqcha','Meva-Cheva'],
       dots=document.getElementById('dots'),hn=document.getElementById('hname'),hnum=document.getElementById('hnum'),cur=0,t=null,db=[];
@@ -953,9 +962,13 @@ footer{border-top:1px solid var(--line);padding:44px 0 46px;color:var(--muted)}
 
   var bg=document.getElementById('burger'),mn=document.getElementById('mnav');
   function mset(o){if(!bg)return;bg.setAttribute('aria-expanded',o?'true':'false');
+    var mm=document.getElementById('main'), ft=document.querySelector('footer');
+    function hide(x){[mm,ft].forEach(function(el){if(!el)return;
+      if(x){el.setAttribute('aria-hidden','true');try{el.inert=true;}catch(e){}}
+      else{el.removeAttribute('aria-hidden');try{el.inert=false;}catch(e){}}});}
     if(o){mn.classList.add('on');[].forEach.call(mn.children,function(a,i){a.style.animationDelay=(50+i*45)+'ms';});
-      requestAnimationFrame(function(){mn.classList.add('vis');});document.body.style.overflow='hidden';}
-    else{mn.classList.remove('vis');mn.classList.remove('on');document.body.style.overflow='';}}
+      requestAnimationFrame(function(){mn.classList.add('vis');});document.body.style.overflow='hidden';hide(true);}
+    else{mn.classList.remove('vis');mn.classList.remove('on');document.body.style.overflow='';hide(false);}}
   bg&&bg.addEventListener('click',function(){mset(bg.getAttribute('aria-expanded')!=='true');});
   mn&&mn.addEventListener('click',function(e){if(e.target.tagName==='A')mset(false);});
 
@@ -1075,6 +1088,14 @@ footer{border-top:1px solid var(--line);padding:44px 0 46px;color:var(--muted)}
       if(!modal.classList.contains('on'))document.body.style.overflow='';lbL&&lbL.focus&&lbL.focus();};
     reduce?d():setTimeout(d,300);}
   lb.addEventListener('click',function(e){if(e.target.hasAttribute&&e.target.hasAttribute('data-lbclose'))lclose();});
+  lb.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var v=[].filter.call(lb.querySelectorAll('button'),function(el){return el.getClientRects().length>0;});
+    if(!v.length)return;
+    var f=v[0],l=v[v.length-1];
+    if(e.shiftKey&&document.activeElement===f){e.preventDefault();l.focus();}
+    else if(!e.shiftKey&&document.activeElement===l){e.preventDefault();f.focus();}
+  });
   document.getElementById('lbx').addEventListener('click',lclose);
   document.getElementById('lbp').addEventListener('click',function(){lshow(gi-1);});
   document.getElementById('lbn').addEventListener('click',function(){lshow(gi+1);});
