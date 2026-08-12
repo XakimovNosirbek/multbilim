@@ -54,9 +54,12 @@ tema tugmasi bilan almashtirilganda rang tushib qoladi va matn ko'rinmay qolishi
 
 ### Oltin kvotasi
 
-`var(--gold)` **aynan 5 marta** ishlatilishi kerak:
+`var(--gold)` **aynan 6 marta** ishlatilishi kerak:
 `.logo .mark::after` · `.logo .l1` · `.hero h1 span:nth-child(2)` · `.big em` ·
-`.dots button[aria-current]`
+`.dots button[aria-current]` · `.vcard.playing` (ramka)
+
+Oltinning yagona vazifasi — **brend belgisi va faol/ta'kidlangan element**. Faol
+slayd nuqtasi va o'ynayotgan video ramkasi shu toifaga kiradi. Boshqa hech narsaga.
 
 Oltinni ko'paytirish — bu dizaynni buzadigan eng oson yo'l. Interaktiv yoki
 strukturaviy element uchun **har doim `--blue`**.
@@ -64,7 +67,7 @@ strukturaviy element uchun **har doim `--blue`**.
 Tekshirish:
 
 ```bash
-grep -o 'var(--gold)' index.html | wc -l   # 5 bo'lishi kerak
+grep -o 'var(--gold)' index.html | wc -l   # 6 bo'lishi kerak
 grep -c 'var(--cyan)' index.html           # 0 — cyan olib tashlangan, qaytarmang
 ```
 

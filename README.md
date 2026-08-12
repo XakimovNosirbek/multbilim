@@ -166,6 +166,7 @@ Kam ishlatilgani uchun kuchli. Yangi oltin qo'shsangiz, u ta'kid bo'lishdan to'x
 3. `.hero h1 span:nth-child(2)` — bosh sarlavhadagi bitta so'z
 4. `.big em` — manifestdagi ta'kid
 5. `.dots button[aria-current]` — faol slayd
+6. `.vcard.playing` — hozir o'ynayotgan video ramkasi
 
 Boshqa hamma joyda **ko'k**.
 
@@ -252,8 +253,12 @@ curl -s "https://www.youtube.com/feeds/videos.xml?channel_id=UC-wrA-QvS7dwDO-bZZ
 curl -s "https://www.youtube.com/feeds/videos.xml?channel_id=UCTKIXsv9PijMNmUZ8iPC7Lg"  # Yashil makon
 ```
 
-Preview rasmlari `i.ytimg.com/vi/<ID>/hqdefault.jpg`, pleer `youtube-nocookie.com`
-orqali va faqat bosilganda yuklanadi.
+Preview rasmlari `i.ytimg.com/vi/<ID>/maxresdefault.jpg` (1280×720). Agar video HD
+yuklanmagan bo'lsa `onerror` orqali `hqdefault.jpg` ga tushadi. **`hqdefault` ni
+asosiy qilib qo'ymang** — u 480×360 va retina ekranda xira ko'rinadi.
+
+Pleer `youtube-nocookie.com` orqali va faqat bosilganda yuklanadi: sahifa ochilishida
+8 ta iframe ~2 MB bo'lardi, hozir esa faqat preview rasmi.
 
 ---
 
