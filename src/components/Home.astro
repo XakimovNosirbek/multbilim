@@ -1,0 +1,301 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Card from './Card.astro';
+import ContactForm from './ContactForm.astro';
+import Faq from './Faq.astro';
+import Hero from './Hero.astro';
+import ProjectCard from './ProjectCard.astro';
+import Row from './Row.astro';
+import SectionHead from './SectionHead.astro';
+import TeamMember from './TeamMember.astro';
+import VideoCard from './VideoCard.astro';
+import { openings } from '../data/careers';
+import { faq } from '../data/faq';
+import { process } from '../data/process';
+import { services } from '../data/services';
+import { emails, youtubeChannels } from '../data/site';
+import { stats } from '../data/stats';
+import { team } from '../data/team';
+import { tech } from '../data/tech';
+import { channels } from '../data/videos';
+import type { Lang } from '../i18n/ui';
+import { absPath, assetPath, path as localePath, pick, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const projectHref = (id: string) => localePath(lang, `loyihalar/${id}/`);
+const num = (i: number) => String(i + 1).padStart(2, '0');
+
+/** Faqat tekshirilgan ma'lumot: nom, manzil, tavsif va kanallar.
+    Namunaviy email va ofis manzili JSON-LD ga qo'yilmadi. */
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'MultBilim',
+    alternateName: 'MultBilim Studio',
+    url: absPath(lang),
+    logo: new URL(assetPath('favicon.svg'), Astro.site).href,
+    description: t('meta.description'),
+    sameAs: youtubeChannels.map((c) => c.url),
+  },
+];
+---
+
+<Base lang={lang} title={t('meta.title')} description={t('meta.description')} jsonLd={jsonLd}>
+  <Hero
+    lang={lang}
+    slides={projects.map((p) => ({ cover: p.data.cover, name: pick(p.data.title, lang) }))}
+    projectsHref={`${localePath(lang)}#loyihalar`}
+    watchHref={`${localePath(lang)}#tomosha`}
+  />
+
+  <section id="studiya">
+    <div class="wrap">
+      <div class="mani">
+        <div class="rv">
+          <span class="fps mono"><b>24</b> FPS</span>
+          <span class="eyebrow">{t('studio.eyebrow')}</span>
+          <h2 class="big">{t('studio.h1')}<em>{t('studio.h2em')}</em></h2>
+        </div>
+        <div class="side rv">
+          <p>{t('studio.p1')}</p>
+          <p>{t('studio.p2')}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="loyihalar">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('projects.eyebrow')}
+        title={t('projects.h')}
+        lede={t('projects.lede')}
+      />
+      <div class="pgrid">
+        {
+          projects.map((p, i) => (
+            <ProjectCard
+              href={projectHref(p.id)}
+              cover={p.data.cover}
+              alt={pick(p.data.coverAlt, lang)}
+              num={num(i)}
+              genre={pick(p.data.genre, lang)}
+              title={pick(p.data.title, lang)}
+              meta={pick(p.data.cardMeta, lang)}
+              text={pick(p.data.cardText, lang)}
+              openLabel={t('projects.open')}
+            />
+          ))
+        }
+      </div>
+
+      <div class="stats rv">
+        {
+          stats.map((s) => (
+            <div>
+              <b>{pick(s.value, lang)}</b>
+              <span>{t(s.label)}</span>
+            </div>
+          ))
+        }
+      </div>
+      <p class="note rv">{t('projects.note')}</p>
+    </div>
+  </section>
+
+  <section id="tomosha">
+    <div class="wrap">
+      <SectionHead eyebrow={t('watch.eyebrow')} title={t('watch.h')} lede={t('watch.lede')} />
+      {
+        channels.map((ch) => (
+          <div class="chan rv">
+            <div class="chan-h">
+              <div>
+                <h3>{pick(ch.name, lang)}</h3>
+                <p>{pick(ch.blurb, lang)}</p>
+              </div>
+              <div class="chan-s">
+                {ch.stats.map((s) => (
+                  <span>{pick(s, lang)}</span>
+                ))}
+              </div>
+            </div>
+            <div class="vgrid">
+              {ch.videos.map((v, i) => (
+                <VideoCard
+                  yt={v.yt}
+                  channel={pick(ch.name, lang)}
+                  title={pick(v.title, lang)}
+                  meta={pick(v.meta, lang)}
+                  num={num(i)}
+                  playLabel={t('watch.playLabel')}
+                  closeLabel={t('a11y.closeVideo')}
+                />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="xizmatlar">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('services.eyebrow')}
+        title={t('services.h')}
+        lede={t('services.lede')}
+      />
+      <div class="cards rv">
+        {
+          services.map((s) => (
+            <Card k={s.k} title={pick(s.title, lang)} text={pick(s.text, lang)} />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="jarayon">
+    <div class="wrap">
+      <SectionHead eyebrow={t('process.eyebrow')} title={t('process.h')} />
+      <div class="cards rv">
+        {
+          process.map((s) => (
+            <Card
+              k={`${t('process.stage')} ${s.n}`}
+              title={pick(s.title, lang)}
+              text={pick(s.text, lang)}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="texnologiya">
+    <div class="wrap">
+      <SectionHead eyebrow={t('tech.eyebrow')} title={t('tech.h')} lede={t('tech.lede')} />
+      <div class="cards rv">
+        {
+          tech.map((item) => (
+            <Card
+              tools={item.tools}
+              title={pick(item.title, lang)}
+              text={pick(item.text, lang)}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="jamoa">
+    <div class="wrap">
+      <SectionHead eyebrow={t('team.eyebrow')} title={t('team.h')} lede={t('team.lede')} />
+      <div class="team rv">
+        {
+          team.map((m) => (
+            <TeamMember
+              initials={m.initials}
+              name={m.name}
+              role={pick(m.role, lang)}
+              placeholder={t('team.placeholder')}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="karyera">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('careers.eyebrow')}
+        title={t('careers.h')}
+        lede={t('careers.lede')}
+      />
+      <div class="rows rv">
+        {
+          openings.map((o) => (
+            <Row
+              href={`${localePath(lang)}#aloqa`}
+              area={pick(o.area, lang)}
+              title={pick(o.title, lang)}
+              meta={pick(o.meta, lang)}
+              action={t('careers.apply')}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="savollar">
+    <div class="wrap">
+      <SectionHead eyebrow={t('faq.eyebrow')} title={t('faq.h')} lede={t('faq.lede')} />
+      <Faq items={faq.map((f) => ({ q: pick(f.q, lang), a: pick(f.a, lang) }))} />
+    </div>
+  </section>
+
+  <section id="aloqa">
+    <div class="wrap">
+      <SectionHead
+        eyebrow={t('contact.eyebrow')}
+        title={t('contact.h')}
+        lede={t('contact.lede')}
+      />
+      <div class="cwrap rv">
+        <ContactForm lang={lang} />
+        <aside class="cdir">
+          <div class="dg">
+            <span class="k">{t('contact.depts')}</span>
+            <ul class="dl">
+              <li>
+                <span>{t('contact.deptGeneral')}</span>
+                <a href={`mailto:${emails.general}`}>{emails.general}</a>
+              </li>
+              <li>
+                <span>{t('contact.deptProject')}</span>
+                <a href={`mailto:${emails.project}`}>{emails.project}</a>
+              </li>
+              <li>
+                <span>{t('contact.deptCareer')}</span>
+                <a href={`mailto:${emails.career}`}>{emails.career}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="dg">
+            <span class="k">{t('contact.studio')}</span>
+            <p class="dtx">{t('contact.studioAddress')}<br />{t('contact.studioHours')}</p>
+          </div>
+          <div class="dg">
+            <span class="k">{t('contact.channels')}</span>
+            <p class="dtx">
+              {
+                youtubeChannels.map((c, i) => (
+                  <>
+                    {i > 0 && <br />}
+                    <a href={c.url} target="_blank" rel="noopener">
+                      {pick(c.name, lang)} &#8599;
+                    </a>
+                  </>
+                ))
+              }
+            </p>
+          </div>
+          <p class="note">{t('contact.note')}</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>

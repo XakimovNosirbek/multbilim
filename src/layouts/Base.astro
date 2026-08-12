@@ -52,7 +52,7 @@ const og = ogImage ?? new URL(ogDefault.src, Astro.site).href;
     <meta name="twitter:card" content="summary_large_image" />
     {
       jsonLd.map((data) => (
-        <script type="application/ld+json" set:html={JSON.stringify(data)} />
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(data)} />
       ))
     }
     {/* Temani CSS dan oldin qo'yish — sahifa ochilganda rang sakramaydi */}

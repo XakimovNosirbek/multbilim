@@ -1,15 +1,5 @@
 ---
-import Base from '../layouts/Base.astro';
-import { useTranslations } from '../i18n/utils';
-
-const lang = 'uz' as const;
-const t = useTranslations(lang);
+import Home from '../components/Home.astro';
 ---
 
-<Base lang={lang} title={t('meta.title')} description={t('meta.description')}>
-  <section id="top">
-    <div class="wrap">
-      <h1 class="big">{t('hero.l1')} {t('hero.l2')} {t('hero.l3')}</h1>
-    </div>
-  </section>
-</Base>
+<Home lang="uz" />

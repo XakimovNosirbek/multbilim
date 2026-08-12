@@ -18,10 +18,12 @@ const { href, cover, alt, num, genre, title, meta, text, openLabel } = Astro.pro
 ---
 
 <a class="pcard rv" href={href}>
+  {/* hero bilan bir xil kenglik: brauzer allaqachon yuklagan faylni qayta ishlatadi */}
   <Picture
     src={cover}
-    formats={['avif', 'webp']}
-    widths={[400, 800]}
+    formats={['avif']}
+    fallbackFormat="webp"
+    widths={[640, 1024]}
     sizes="(min-width:1240px) 400px, (min-width:700px) 50vw, 100vw"
     alt={alt}
     loading="lazy"

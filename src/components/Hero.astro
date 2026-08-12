@@ -25,7 +25,8 @@ const t = useTranslations(lang);
           */}
           <Picture
             src={s.cover}
-            formats={['avif', 'webp']}
+            formats={['avif']}
+            fallbackFormat="webp"
             widths={[640, 1024, 1400]}
             sizes="100vw"
             alt=""
