@@ -414,7 +414,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 max(46px,calc(env(safe-ar
 .mnav .langs a::after{content:none}
 
 /* hero slaydlari va loyiha muqovasi endi <img> — astro:assets srcset/AVIF beradi */
-.hero-bg img,.pd-hero > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-bg img,.pd-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 
 /* futer: eski versiyaga havola + yuqoriga */
 .fend{display:flex;gap:16px;flex-wrap:wrap}

@@ -1,0 +1,153 @@
+---
+import { getImage, Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Lightbox from './Lightbox.astro';
+import type { Lang } from '../i18n/ui';
+import { absPath, path as localePath, pick, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  entry: CollectionEntry<'projects'>;
+  prev: { id: string; title: string };
+  next: { id: string; title: string };
+}
+
+const { lang, entry, prev, next } = Astro.props;
+const t = useTranslations(lang);
+const p = entry.data;
+const pagePath = `loyihalar/${entry.id}/`;
+
+const ogImage = await getImage({ src: p.cover, width: 1200, format: 'jpg' });
+const ogUrl = new URL(ogImage.src, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: pick(p.title, lang),
+    genre: pick(p.genre, lang),
+    abstract: pick(p.cardText, lang),
+    inLanguage: lang,
+    url: absPath(lang, pagePath),
+    image: ogUrl,
+    creator: { '@type': 'Organization', name: 'MultBilim', url: absPath(lang) },
+  },
+];
+
+/** `.st` bloklari navbat bilan ochiladi — eski modalda buni JS qilardi. */
+let step = 0;
+const delay = () => `animation-delay:${70 + step++ * 85}ms`;
+---
+
+<Base
+  lang={lang}
+  path={pagePath}
+  title={`${pick(p.title, lang)} — MultBilim`}
+  description={pick(p.cardText, lang)}
+  ogImage={ogUrl}
+  jsonLd={jsonLd}
+>
+  <section class="pd show" data-pal={p.palette}>
+    <div class="pd-hero">
+      <Picture
+        src={p.cover}
+        formats={['avif']}
+        fallbackFormat="webp"
+        widths={[640, 1024, 1400]}
+        sizes="100vw"
+        alt={pick(p.coverAlt, lang)}
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="pd-hi st" style={delay()}>
+        <span class="g">{pick(p.genre, lang)}</span>
+        <h2>{pick(p.title, lang)}</h2>
+        <p class="tag">{pick(p.tagline, lang)}</p>
+        <div class="pd-meta">
+          {p.badges.map((b) => <span>{pick(b, lang)}</span>)}
+        </div>
+      </div>
+    </div>
+
+    <div class="pd-body">
+      <a class="pd-back" href={`${localePath(lang)}#loyihalar`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+        {t('projects.back')}
+      </a>
+
+      {
+        p.sections.map((sec) => (
+          <div class="pd-sec st" style={delay()}>
+            <h3>{pick(sec.title, lang)}</h3>
+            {sec.paragraphs?.map((par) => <p>{pick(par, lang)}</p>)}
+            {sec.quote && <p class="pd-q">{pick(sec.quote, lang)}</p>}
+            {sec.characters && (
+              <div class="pd-ch">
+                {sec.characters.map((ch) => (
+                  <div class="pdc">
+                    <Picture
+                      src={ch.image}
+                      formats={['avif']}
+                      fallbackFormat="webp"
+                      widths={[280, 560]}
+                      sizes="(min-width:900px) 280px, (min-width:560px) 45vw, 100vw"
+                      alt={pick(ch.alt, lang)}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div class="n">
+                      <h4>{pick(ch.name, lang)}</h4>
+                      <span class="d">{pick(ch.desc, lang)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {sec.values && (
+              <div class="pd-v">
+                {sec.values.map((v) => (
+                  <div class="pdv">
+                    <b>{pick(v.title, lang)}</b>
+                    <span>{pick(v.text, lang)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {sec.gallery && (
+              <div class="pd-g">
+                {sec.gallery.map((g) => (
+                  <button type="button">
+                    <Picture
+                      src={g.image}
+                      formats={['avif']}
+                      fallbackFormat="webp"
+                      widths={[400, 800]}
+                      sizes="(min-width:768px) 50vw, 100vw"
+                      alt={pick(g.alt, lang)}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ))
+      }
+
+      <div class="pd-nav st" style={delay()}>
+        <a href={localePath(lang, `loyihalar/${prev.id}/`)}>
+          <span class="k">{t('projects.prev')}</span>
+          <strong>{prev.title}</strong>
+        </a>
+        <a class="nx" href={localePath(lang, `loyihalar/${next.id}/`)}>
+          <span class="k">{t('projects.next')}</span>
+          <strong>{next.title}</strong>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Lightbox slot="overlay" lang={lang} />
+</Base>
