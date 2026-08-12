@@ -39,7 +39,7 @@ Faqat mavjud tokenlarni ishlating. **Yangi rang o'ylab topmang.**
 --page-bg  --page-text  --muted  --line  --line-2
 --panel  --panel-2  --header-bg  --btn-bg  --btn-text
 --blue   (asosiy urg'u)
---gold   (ta'kid — faqat 5 joyda)
+--gold   (ta'kid — faqat 6 joyda)
 ```
 
 Tokenlar **to'rt blokda** e'lon qilingan:

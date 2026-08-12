@@ -135,11 +135,12 @@ Logo sarig'i yorug' fonda 1,15:1 beradi, ya'ni ko'rinmaydi.
 | `--line` | `rgba(255,255,255,.12)` | `rgba(14,21,32,.14)` | chegara |
 | `--panel` | `rgba(255,255,255,.035)` | `rgba(13,22,36,.043)` | sirt |
 | `--blue` | `#5B9BFF` | `#0f5fd6` | **asosiy urg'u** |
-| `--gold` | `#ffc928` | `#7d5600` | **ta'kid, faqat 5 joyda** |
+| `--gold` | `#ffc928` | `#7d5600` | **ta'kid, faqat 6 joyda** |
 
-Uchta joyda e'lon qilinadi: `:root`, `@media (prefers-color-scheme:light)` +
-`:root[data-theme="light"]`, `:root[data-theme="dark"]`. **Uchalasini ham
-yangilash shart**, aks holda tugma bilan almashtirilganda rang tushib qoladi.
+Tokenlar **to'rt blokda** e'lon qilinadi: `:root` (qorong'i), `@media
+(prefers-color-scheme:light)`, `:root[data-theme="light"]`, `:root[data-theme="dark"]`.
+**To'rttasini ham yangilash shart** — bittasini o'tkazib yuborsangiz, tema tugmasi
+bilan almashtirilganda rang tushib qoladi.
 
 ### Kontrast (WCAG AA, o'lchangan)
 
@@ -157,7 +158,7 @@ yangilash shart**, aks holda tugma bilan almashtirilganda rang tushib qoladi.
 **Yiqilgan juftlik yo'q.** Rangni o'zgartirsangiz qayta o'lchang — `AGENTS.md` da
 skript bor.
 
-### Oltin faqat 5 joyda
+### Oltin faqat 6 joyda
 
 Kam ishlatilgani uchun kuchli. Yangi oltin qo'shsangiz, u ta'kid bo'lishdan to'xtaydi:
 
