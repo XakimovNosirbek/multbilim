@@ -1,0 +1,32 @@
+---
+import LangSwitch from './LangSwitch.astro';
+import type { Lang } from '../i18n/ui';
+import { path as localePath, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  path?: string;
+}
+
+const { lang, path = '' } = Astro.props;
+const t = useTranslations(lang);
+const home = localePath(lang);
+const sec = (id: string) => `${home}#${id}`;
+
+const links = [
+  ['loyihalar', t('nav.projects')],
+  ['tomosha', t('nav.watch')],
+  ['xizmatlar', t('nav.services')],
+  ['texnologiya', t('nav.tech')],
+  ['studiya', t('nav.studio')],
+  ['jamoa', t('nav.team')],
+  ['karyera', t('nav.careers')],
+  ['savollar', t('nav.faq')],
+  ['aloqa', t('nav.contact')],
+] as const;
+---
+
+<nav class="mnav" id="mnav" aria-label={t('a11y.mobileNav')}>
+  {links.map(([id, label]) => <a href={sec(id)}>{label}</a>)}
+  <LangSwitch lang={lang} path={path} class="mlangs" />
+</nav>

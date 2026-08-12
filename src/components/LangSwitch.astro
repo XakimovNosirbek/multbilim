@@ -1,0 +1,31 @@
+---
+import { langLabel, languages, type Lang } from '../i18n/ui';
+import { path as localePath, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Til prefiksisiz yo'l — shu sahifaning boshqa tildagi varianti uchun */
+  path?: string;
+  class?: string;
+}
+
+const { lang, path = '', class: cls } = Astro.props;
+const t = useTranslations(lang);
+const codes = Object.keys(languages) as Lang[];
+---
+
+<span class:list={['langs', cls]} role="group" aria-label={t('a11y.langs')}>
+  {
+    codes.map((code) => (
+      <a
+        href={localePath(code, path)}
+        lang={code}
+        hreflang={code}
+        aria-current={code === lang ? 'true' : undefined}
+        title={languages[code]}
+      >
+        {langLabel[code]}
+      </a>
+    ))
+  }
+</span>

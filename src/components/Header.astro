@@ -1,0 +1,137 @@
+---
+import LangSwitch from './LangSwitch.astro';
+import type { Lang } from '../i18n/ui';
+import { path as localePath, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  path?: string;
+}
+
+const { lang, path = '' } = Astro.props;
+const t = useTranslations(lang);
+const home = localePath(lang);
+/** Bo'lim langarlari faqat bosh sahifada bor — ichki sahifalardan bosh sahifaga qaytaradi. */
+const sec = (id: string) => `${home}#${id}`;
+
+const links = [
+  ['loyihalar', t('nav.projects')],
+  ['tomosha', t('nav.watch')],
+  ['xizmatlar', t('nav.services')],
+  ['texnologiya', t('nav.tech')],
+  ['jamoa', t('nav.team')],
+  ['karyera', t('nav.careers')],
+] as const;
+---
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href={sec('top')} aria-label={t('a11y.logoHome')}
+      ><span class="mark" aria-hidden="true"></span><span class="wm"
+        ><span class="l1">MULT</span><span class="l2">BiLiM</span></span
+      ></a
+    >
+    <nav class="hnav">
+      {links.map(([id, label]) => <a href={sec(id)}>{label}</a>)}
+      <a class="btn btn-solid" href={sec('aloqa')}>{t('nav.contact')}</a>
+      <span class="htools">
+        <LangSwitch lang={lang} path={path} />
+        <button class="icb" id="theme" type="button" aria-label={t('a11y.theme')}>
+          <svg
+            class="t-sun"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            aria-hidden="true"
+            ><circle cx="12" cy="12" r="4.2"></circle><path
+              d="M12 2.6v2.4M12 19v2.4M2.6 12h2.4M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3L17 7M7 17l-1.7 1.7"
+            ></path></svg
+          >
+          <svg
+            class="t-moon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            aria-hidden="true"
+            ><path d="M20.5 14.6A8.6 8.6 0 019.4 3.5a8.8 8.8 0 1011.1 11.1z"></path></svg
+          >
+        </button>
+        <button
+          class="burger"
+          id="burger"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mnav"
+          aria-label={t('a11y.menu')}><i></i></button
+        >
+      </span>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const root = document.documentElement;
+
+  // tema
+  const tb = document.getElementById('theme');
+  tb?.addEventListener('click', () => {
+    const cur =
+      root.getAttribute('data-theme') ||
+      (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('mb-theme', next);
+    } catch (e) {}
+  });
+
+  // mobil menyu: ochilganda orqa fon inert + aria-hidden bo'ladi
+  const burger = document.getElementById('burger');
+  const mnav = document.getElementById('mnav');
+
+  function setMenu(open: boolean) {
+    if (!burger || !mnav) return;
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    const behind = [document.getElementById('main'), document.querySelector('footer')];
+    behind.forEach((el) => {
+      if (!el) return;
+      if (open) {
+        el.setAttribute('aria-hidden', 'true');
+        try {
+          (el as HTMLElement).inert = true;
+        } catch (e) {}
+      } else {
+        el.removeAttribute('aria-hidden');
+        try {
+          (el as HTMLElement).inert = false;
+        } catch (e) {}
+      }
+    });
+    if (open) {
+      mnav.classList.add('on');
+      Array.from(mnav.children).forEach((el, i) => {
+        (el as HTMLElement).style.animationDelay = `${50 + i * 45}ms`;
+      });
+      requestAnimationFrame(() => mnav.classList.add('vis'));
+      document.body.style.overflow = 'hidden';
+    } else {
+      mnav.classList.remove('vis');
+      mnav.classList.remove('on');
+      document.body.style.overflow = '';
+    }
+  }
+
+  burger?.addEventListener('click', () =>
+    setMenu(burger.getAttribute('aria-expanded') !== 'true'),
+  );
+  mnav?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).tagName === 'A') setMenu(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && burger?.getAttribute('aria-expanded') === 'true') setMenu(false);
+  });
+</script>

@@ -1,0 +1,78 @@
+---
+import { youtubeChannels } from '../data/site';
+import type { Lang } from '../i18n/ui';
+import { assetPath, path as localePath, pick, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const home = localePath(lang);
+const sec = (id: string) => `${home}#${id}`;
+
+const cols = [
+  {
+    head: t('footer.nav'),
+    links: [
+      [sec('loyihalar'), t('nav.projects')],
+      [sec('tomosha'), t('nav.watch')],
+      [sec('xizmatlar'), t('nav.services')],
+      [sec('texnologiya'), t('nav.tech')],
+    ],
+  },
+  {
+    head: t('footer.studio'),
+    links: [
+      [sec('studiya'), t('footer.about')],
+      [sec('jamoa'), t('nav.team')],
+      [sec('karyera'), t('nav.careers')],
+      [sec('savollar'), t('nav.faq')],
+    ],
+  },
+  {
+    head: t('footer.partner'),
+    links: [
+      [sec('aloqa'), t('footer.order')],
+      [sec('aloqa'), t('footer.copro')],
+      [sec('aloqa'), t('footer.license')],
+    ],
+  },
+];
+---
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      {
+        cols.map((col) => (
+          <div>
+            <h4>{col.head}</h4>
+            {col.links.map(([href, label]) => (
+              <a href={href}>{label}</a>
+            ))}
+          </div>
+        ))
+      }
+      <div>
+        <h4>{t('footer.channels')}</h4>
+        {
+          youtubeChannels.map((c) => (
+            <a href={c.url} target="_blank" rel="noopener">
+              {pick(c.name, lang)} &#8599;
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    <div class="fbot">
+      <span>{t('footer.rights')}</span>
+      <span class="fend">
+        <a href={assetPath('html/')}>{t('footer.oldVersion')}</a>
+        <a href={sec('top')}>{t('footer.top')} &#8593;</a>
+      </span>
+    </div>
+    <p class="fnote2">{t('footer.disclaimer')}</p>
+  </div>
+</footer>

@@ -1,0 +1,97 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import Header from '../components/Header.astro';
+import MobileNav from '../components/MobileNav.astro';
+import Footer from '../components/Footer.astro';
+import ogFallback from '../assets/img/cov-alpomish.jpg';
+import type { Lang } from '../i18n/ui';
+import { absPath, alternates, assetPath, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  /** Til prefiksi va `base` siz yo'l: '' yoki 'loyihalar/zij/' */
+  path?: string;
+  title: string;
+  description: string;
+  /** Absolyut URL. Berilmasa — bosh muqova. */
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { lang, path = '', title, description, ogImage, jsonLd = [] } = Astro.props;
+const t = useTranslations(lang);
+const canonical = absPath(lang, path);
+const ogDefault = await getImage({ src: ogFallback, width: 1200, format: 'jpg' });
+const og = ogImage ?? new URL(ogDefault.src, Astro.site).href;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#060912" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href={assetPath('favicon.svg')} type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    {
+      alternates(path).map((a) => (
+        <link rel="alternate" hreflang={a.lang} href={a.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={absPath('uz', path)} />
+    <link rel="sitemap" href={assetPath('sitemap-index.xml')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={og} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {
+      jsonLd.map((data) => (
+        <script type="application/ld+json" set:html={JSON.stringify(data)} />
+      ))
+    }
+    {/* Temani CSS dan oldin qo'yish — sahifa ochilganda rang sakramaydi */}
+    <script is:inline>
+      try {
+        var s = localStorage.getItem('mb-theme');
+        if (s === 'dark' || s === 'light') document.documentElement.setAttribute('data-theme', s);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">{t('a11y.skip')}</a>
+    <Header lang={lang} path={path} />
+    <MobileNav lang={lang} path={path} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <slot name="overlay" />
+
+    <script>
+      // `.rv` bloklari ko'rinishga kirganda ochiladi.
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const rv = document.querySelectorAll('.rv');
+      if (reduce || !('IntersectionObserver' in window)) {
+        rv.forEach((e) => e.classList.add('in'));
+      } else {
+        const io = new IntersectionObserver(
+          (en) =>
+            en.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('in');
+                io.unobserve(e.target);
+              }
+            }),
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+        );
+        rv.forEach((e) => io.observe(e));
+      }
+    </script>
+  </body>
+</html>
