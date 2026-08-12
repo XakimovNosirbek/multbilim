@@ -267,7 +267,7 @@ const ru: Record<UiKey, string> = {
   'contact.deptProject': 'Заказы и копродукция',
   'contact.deptCareer': 'Карьера',
   'contact.studio': 'Студия',
-  'contact.studioAddress': 'город Ташкент',
+  'contact.studioAddress': 'г. Ташкент',
   'contact.studioHours': 'Понедельник–пятница · 09:00–18:00',
   'contact.channels': 'Каналы',
   'contact.note': 'Контакты пока условные. Будут обновлены после получения реальных адресов.',
@@ -279,7 +279,7 @@ const ru: Record<UiKey, string> = {
   'footer.partner': 'Сотрудничество',
   'footer.order': 'Заказ',
   'footer.copro': 'Копродукция',
-  'footer.license': 'Лицензирование',
+  'footer.license': 'Лицензия',
   'footer.rights': '© 2026 MultBilim Studio · Ташкент, Узбекистан',
   'footer.top': 'Наверх',
   'footer.oldVersion': 'Предыдущая версия',
@@ -336,7 +336,7 @@ const en: Record<UiKey, string> = {
 
   'studio.eyebrow': 'Studio manifesto',
   'studio.h1': 'Animation is not drawing. It is ',
-  'studio.h2em': 'the craft of time.',
+  'studio.h2em': 'controlling time.',
   'studio.p1':
     'MultBilim is a studio that brings together Uzbek stories, science and childhood imagination in the language of modern animation.',
   'studio.p2':
@@ -357,7 +357,7 @@ const en: Record<UiKey, string> = {
   'stats.projects': 'original projects',
   'stats.people': 'creative specialists',
 
-  'watch.eyebrow': 'On air now',
+  'watch.eyebrow': 'Now airing',
   'watch.h': 'Stories in motion.',
   'watch.lede': 'Tap a video — it plays right on this page, without leaving for YouTube.',
   'watch.playLabel': 'watch here',
@@ -396,15 +396,15 @@ const en: Record<UiKey, string> = {
   'contact.h': "Let's talk about your project.",
   'contact.lede':
     'A short description and a rough running time are enough. We will work out the rest together.',
-  'contact.name': 'Name and surname',
+  'contact.name': 'Full name',
   'contact.email': 'Email',
   'contact.org': 'Company',
-  'contact.topic': 'Topic',
+  'contact.topic': 'Subject',
   'contact.msg': 'About the project',
   'contact.submit': 'Prepare the message',
   'contact.formNote': 'The form is sent through your email app.',
   'contact.mailSubject': 'Enquiry from the website',
-  'contact.depts': 'Departments',
+  'contact.depts': 'Desks',
   'contact.deptGeneral': 'General',
   'contact.deptProject': 'Commissions and co-production',
   'contact.deptCareer': 'Careers',
@@ -429,10 +429,10 @@ const en: Record<UiKey, string> = {
     'Project artwork and descriptions come from the studio pitch documents. YouTube view counts come from the public RSS feeds of the «Bek va Lola» and «Yashil makon» channels and cover the latest 15 releases of each channel. The team, openings, answers and contact addresses are placeholders.',
 
   'project.synopsis': 'Synopsis',
-  'project.idea': 'Core idea',
+  'project.idea': 'The core idea',
   'project.characters': 'Characters',
   'project.values': 'Values for children',
-  'project.frames': 'Frames',
+  'project.frames': 'Stills',
 
   'nf.code': '404',
   'nf.h': 'This page was not found.',
