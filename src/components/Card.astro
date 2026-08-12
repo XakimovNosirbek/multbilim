@@ -1,0 +1,19 @@
+---
+interface Props {
+  /** `.card .k` — raqam yoki bosqich yorlig'i */
+  k?: string;
+  /** `.card .tools` — vositalar ro'yxati */
+  tools?: string;
+  title: string;
+  text: string;
+}
+
+const { k, tools, title, text } = Astro.props;
+---
+
+<div class="card">
+  {k && <span class="k">{k}</span>}
+  {tools && <span class="tools">{tools}</span>}
+  <h3>{title}</h3>
+  <p>{text}</p>
+</div>

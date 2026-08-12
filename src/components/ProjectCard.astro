@@ -1,0 +1,40 @@
+---
+import { Picture } from 'astro:assets';
+
+interface Props {
+  href: string;
+  cover: ImageMetadata;
+  alt: string;
+  /** `01` … `06` */
+  num: string;
+  genre: string;
+  title: string;
+  meta: string;
+  text: string;
+  openLabel: string;
+}
+
+const { href, cover, alt, num, genre, title, meta, text, openLabel } = Astro.props;
+---
+
+<a class="pcard rv" href={href}>
+  <Picture
+    src={cover}
+    formats={['avif', 'webp']}
+    widths={[400, 800]}
+    sizes="(min-width:1240px) 400px, (min-width:700px) 50vw, 100vw"
+    alt={alt}
+    loading="lazy"
+    decoding="async"
+  />
+  <span class="pnum">{num}</span>
+  <div class="pin">
+    <span class="g">{genre}</span>
+    <h3>{title}</h3>
+    <span class="meta">{meta}</span>
+    <div class="reveal">
+      <p>{text}</p>
+      <span class="popen">{openLabel} <b>&#8599;</b></span>
+    </div>
+  </div>
+</a>

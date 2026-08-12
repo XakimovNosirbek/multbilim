@@ -1,0 +1,79 @@
+---
+import { topics } from '../data/contact';
+import { emails } from '../data/site';
+import type { Lang } from '../i18n/ui';
+import { pick, useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{/* Server tomoni yo'q — forma email ilovasini ochadi (mailto). */}
+<form
+  class="cform"
+  id="cform"
+  novalidate
+  data-to={emails.general}
+  data-subject={t('contact.mailSubject')}
+  data-l-name={t('contact.name')}
+  data-l-email={t('contact.email')}
+  data-l-org={t('contact.org')}
+  data-l-topic={t('contact.topic')}
+  data-l-msg={t('contact.msg')}
+>
+  <div class="f2">
+    <label class="fld">
+      <span class="lab">{t('contact.name')}</span>
+      <input type="text" name="name" autocomplete="name" />
+    </label>
+    <label class="fld">
+      <span class="lab">{t('contact.email')}</span>
+      <input type="email" name="email" autocomplete="email" />
+    </label>
+  </div>
+  <div class="f2">
+    <label class="fld">
+      <span class="lab">{t('contact.org')}</span>
+      <input type="text" name="org" autocomplete="organization" />
+    </label>
+    <label class="fld">
+      <span class="lab">{t('contact.topic')}</span>
+      <select name="topic">
+        {topics.map((topic) => <option>{pick(topic, lang)}</option>)}
+      </select>
+    </label>
+  </div>
+  <label class="fld">
+    <span class="lab">{t('contact.msg')}</span>
+    <textarea name="msg" rows="5"></textarea>
+  </label>
+  <div class="frow">
+    <button class="btn btn-solid" type="submit">{t('contact.submit')}</button>
+    <span class="fnote" id="fmsg">{t('contact.formNote')}</span>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('cform') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const l = form.dataset;
+    const body = [
+      `${l.lName}: ${d.get('name') ?? ''}`,
+      `${l.lEmail}: ${d.get('email') ?? ''}`,
+      `${l.lOrg}: ${d.get('org') ?? ''}`,
+      `${l.lTopic}: ${d.get('topic') ?? ''}`,
+      '',
+      `${l.lMsg}:`,
+      `${d.get('msg') ?? ''}`,
+    ].join('\n');
+    window.location.href =
+      `mailto:${l.to}?subject=${encodeURIComponent(l.subject ?? '')}` +
+      `&body=${encodeURIComponent(body)}`;
+  });
+</script>

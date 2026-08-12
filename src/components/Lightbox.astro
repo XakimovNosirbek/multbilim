@@ -1,0 +1,118 @@
+---
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label={t('a11y.lightbox')} aria-hidden="true">
+  <div class="lb-b" data-lbclose></div>
+  <div class="lb-f"><img id="lbi" alt="" /></div>
+  <p class="lb-c" id="lbc"></p>
+  <button class="lbb lb-x" id="lbx" type="button" aria-label={t('a11y.close')}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+  </button>
+  <button class="lbb lb-p" id="lbp" type="button" aria-label={t('a11y.prev')}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+  </button>
+  <button class="lbb lb-n" id="lbn" type="button" aria-label={t('a11y.next')}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+  </button>
+</div>
+
+<script>
+  // Rasm ko'rgich: Esc yopadi, fokus qaytadi, ← → bilan yuriladi,
+  // Tab halqasi ko'rgich ichida qoladi.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lb = document.getElementById('lb');
+  const lbi = document.getElementById('lbi') as HTMLImageElement | null;
+  const lbc = document.getElementById('lbc');
+  const lbx = document.getElementById('lbx');
+  const lbp = document.getElementById('lbp');
+  const lbn = document.getElementById('lbn');
+
+  let group: HTMLImageElement[] = [];
+  let index = 0;
+  let lastFocus: HTMLElement | null = null;
+
+  function show(i: number) {
+    if (!group.length || !lbi) return;
+    index = (i + group.length) % group.length;
+    const el = group[index];
+    // galereya rasmi optimizatsiyalangan — ko'rgich ham shu srcset'dan oladi
+    lbi.src = el.currentSrc || el.src;
+    lbi.srcset = el.srcset;
+    lbi.alt = el.alt || '';
+    if (lbc) lbc.textContent = el.alt || '';
+    const many = group.length > 1;
+    if (lbp) lbp.style.display = many ? 'grid' : 'none';
+    if (lbn) lbn.style.display = many ? 'grid' : 'none';
+  }
+
+  function open(imgs: HTMLImageElement[], i: number) {
+    if (!lb) return;
+    group = imgs;
+    lastFocus = document.activeElement as HTMLElement;
+    show(i);
+    lb.classList.add('on');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => lb.classList.add('vis'));
+    lbx?.focus();
+  }
+
+  function close() {
+    if (!lb || !lb.classList.contains('on')) return;
+    lb.classList.remove('vis');
+    const done = () => {
+      lb.classList.remove('on');
+      lb.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lastFocus?.focus();
+    };
+    reduce ? done() : setTimeout(done, 300);
+  }
+
+  lb?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).hasAttribute('data-lbclose')) close();
+  });
+  lb?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const visible = Array.from(lb.querySelectorAll('button')).filter(
+      (el) => el.getClientRects().length > 0,
+    );
+    if (!visible.length) return;
+    const first = visible[0];
+    const last = visible[visible.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+  lbx?.addEventListener('click', close);
+  lbp?.addEventListener('click', () => show(index - 1));
+  lbn?.addEventListener('click', () => show(index + 1));
+
+  document.querySelectorAll('.pd-g').forEach((g) => {
+    const buttons = Array.from(g.querySelectorAll('button'));
+    const imgs = buttons
+      .map((b) => b.querySelector('img'))
+      .filter((x): x is HTMLImageElement => !!x);
+    buttons.forEach((b, i) => b.addEventListener('click', () => open(imgs, i)));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lb?.classList.contains('on')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') show(index - 1);
+    else if (e.key === 'ArrowRight') show(index + 1);
+  });
+</script>

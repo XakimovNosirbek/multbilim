@@ -1,0 +1,97 @@
+---
+interface Props {
+  /** YouTube video ID */
+  yt: string;
+  channel: string;
+  title: string;
+  meta: string;
+  /** `01` … `04` */
+  num: string;
+  /** aria-label uchun: «<sarlavha> — videoni shu yerda ko'rish» */
+  playLabel: string;
+  closeLabel: string;
+}
+
+const { yt, channel, title, meta, num, playLabel, closeLabel } = Astro.props;
+/**
+ * Preview `maxresdefault` (1280×720). Video HD yuklanmagan bo'lsa `onerror`
+ * orqali `hqdefault` ga tushadi — `hqdefault` ni asosiy qilib qo'ymang,
+ * u 480×360 va retinada xira ko'rinadi.
+ */
+const thumb = `https://i.ytimg.com/vi/${yt}/maxresdefault.jpg`;
+const fallback = `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`;
+---
+
+<article class="vcard">
+  <div class="vstage" data-close-label={closeLabel}>
+    <button class="vtrig" type="button" data-yt={yt} aria-label={`${title} — ${playLabel}`}>
+      <span class="vvis">
+        <img
+          src={thumb}
+          alt=""
+          loading="lazy"
+          onerror={`this.onerror=null;this.src='${fallback}'`}
+        />
+        <span class="vplay"><i></i></span>
+        <span class="vnum">{num}</span>
+      </span>
+    </button>
+  </div>
+  <div class="vinfo">
+    <span class="vch">{channel}</span>
+    <h4>{title}</h4>
+    <span class="vm">{meta}</span>
+  </div>
+</article>
+
+<script>
+  // Pleer faqat bosilganda yuklanadi. Sahifa ochilishida 8 ta iframe
+  // ~2 MB bo'lardi — hozir esa faqat preview rasmi.
+  document.querySelectorAll<HTMLElement>('.vstage').forEach((stage) => {
+    const card = stage.parentElement;
+    const saved = stage.innerHTML;
+    const closeLabel = stage.dataset.closeLabel ?? 'Close';
+
+    function bind() {
+      stage.querySelector('.vtrig')?.addEventListener('click', play);
+    }
+
+    function close() {
+      stage.innerHTML = saved;
+      card?.classList.remove('playing');
+      bind();
+      stage.querySelector<HTMLButtonElement>('.vtrig')?.focus();
+    }
+
+    function play() {
+      const trigger = stage.querySelector<HTMLButtonElement>('.vtrig');
+      const id = trigger?.dataset.yt;
+      if (!id) return;
+
+      const wrap = document.createElement('span');
+      wrap.className = 'vvis on';
+
+      const frame = document.createElement('iframe');
+      frame.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      frame.title = 'YouTube video';
+      frame.allow =
+        'accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture';
+      frame.setAttribute('allowfullscreen', '');
+
+      const x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'vclose';
+      x.setAttribute('aria-label', closeLabel);
+      x.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+      x.addEventListener('click', close);
+
+      wrap.append(frame, x);
+      stage.innerHTML = '';
+      stage.append(wrap);
+      card?.classList.add('playing');
+    }
+
+    bind();
+  });
+</script>

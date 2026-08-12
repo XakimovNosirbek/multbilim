@@ -1,0 +1,20 @@
+---
+interface Props {
+  href: string;
+  area: string;
+  title: string;
+  meta: string;
+  action: string;
+}
+
+const { href, area, title, meta, action } = Astro.props;
+---
+
+<a class="row" href={href}>
+  <span class="k">{area}</span>
+  <div>
+    <h4>{title}</h4>
+    <p>{meta}</p>
+  </div>
+  <span class="go">{action} &#8594;</span>
+</a>

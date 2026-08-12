@@ -1,0 +1,101 @@
+---
+import { Picture } from 'astro:assets';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+  slides: { cover: ImageMetadata; name: string }[];
+  projectsHref: string;
+  watchHref: string;
+}
+
+const { lang, slides, projectsHref, watchHref } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="hero" id="top">
+  <div class="hero-bg" id="slides" aria-hidden="true">
+    {
+      slides.map((s, i) => (
+        <div class={i === 0 ? 'on' : undefined} data-name={s.name}>
+          {/*
+            Birinchi slayd darhol, qolgani lazy. Eski versiyada buni JS
+            (`heroLazy`) qo'lda qilardi — bu yerda brauzerning o'zi qiladi.
+          */}
+          <Picture
+            src={s.cover}
+            formats={['avif', 'webp']}
+            widths={[640, 1024, 1400]}
+            sizes="100vw"
+            alt=""
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchpriority={i === 0 ? 'high' : undefined}
+            decoding={i === 0 ? undefined : 'async'}
+          />
+        </div>
+      ))
+    }
+  </div>
+  <div class="wrap">
+    <h1>
+      <span>{t('hero.l1')}</span><span>{t('hero.l2')}</span><span>{t('hero.l3')}</span>
+    </h1>
+    <p class="lede">{t('hero.lede')}</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href={projectsHref}>{t('hero.ctaProjects')}</a>
+      <a class="btn btn-ghost" href={watchHref}>{t('hero.ctaWatch')}</a>
+    </div>
+    <div class="hbar mono">
+      <span>MB / <b id="hnum">01</b></span>
+      <span id="hname">{slides[0]?.name}</span>
+      <span class="dots" id="dots">
+        {
+          slides.map((s, i) => (
+            <button
+              type="button"
+              aria-label={s.name}
+              aria-current={i === 0 ? 'true' : undefined}
+            />
+          ))
+        }
+      </span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('#slides > div'));
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>('#dots button'));
+  const hname = document.getElementById('hname');
+  const hnum = document.getElementById('hnum');
+  let cur = 0;
+  let timer: ReturnType<typeof setInterval> | null = null;
+
+  function go(i: number) {
+    if (!slides.length) return;
+    slides[cur]?.classList.remove('on');
+    dots[cur]?.removeAttribute('aria-current');
+    cur = i;
+    slides[cur]?.classList.add('on');
+    dots[cur]?.setAttribute('aria-current', 'true');
+    if (hname) hname.textContent = slides[cur]?.dataset.name ?? '';
+    if (hnum) hnum.textContent = `0${cur + 1}`;
+  }
+
+  function restart() {
+    if (timer) clearInterval(timer);
+    if (!reduce && slides.length > 1) {
+      timer = setInterval(() => go((cur + 1) % slides.length), 6000);
+    }
+  }
+
+  dots.forEach((b, i) =>
+    b.addEventListener('click', () => {
+      go(i);
+      restart();
+    }),
+  );
+  restart();
+</script>

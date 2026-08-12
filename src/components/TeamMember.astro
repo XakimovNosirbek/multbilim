@@ -1,0 +1,18 @@
+---
+interface Props {
+  initials: string;
+  name: string;
+  role: string;
+  /** «Namunaviy» yorlig'i — real jamoa berilmagani uchun saqlanadi */
+  placeholder: string;
+}
+
+const { initials, name, role, placeholder } = Astro.props;
+---
+
+<div class="mate">
+  <span class="av">{initials}</span>
+  <h3>{name}</h3>
+  <span class="role">{role}</span>
+  <small>{placeholder}</small>
+</div>

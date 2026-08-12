@@ -1,0 +1,43 @@
+---
+interface Props {
+  items: { q: string; a: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="faq rv" id="faq">
+  {
+    items.map((item) => (
+      <div class="qa">
+        <button class="q" type="button" aria-expanded="false">
+          {item.q}
+          <span class="ic" aria-hidden="true" />
+        </button>
+        <div class="p">
+          <div>
+            <p class="a">{item.a}</p>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const items = Array.from(document.querySelectorAll<HTMLElement>('#faq .qa'));
+  items.forEach((qa) => {
+    const btn = qa.querySelector<HTMLButtonElement>('.q');
+    btn?.addEventListener('click', () => {
+      const wasOpen = qa.classList.contains('open');
+      items.forEach((other) => {
+        other.classList.remove('open');
+        other.querySelector('.q')?.setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) {
+        qa.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>
