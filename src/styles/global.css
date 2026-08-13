@@ -337,14 +337,14 @@ footer{border-top:1px solid var(--line);padding:44px 0 max(46px,calc(env(safe-ar
 .pd-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.55) 55%,var(--pbg))}
 .pd-hi{position:relative;z-index:2;width:100%;max-width:1160px;margin:0 auto;padding:0 clamp(18px,4vw,44px) clamp(28px,5vh,54px)}
 .pd-hi .g{color:var(--pa);font-size:11px;letter-spacing:.2em;text-transform:uppercase;display:block}
-.pd-hi h2{font-size:clamp(32px,6.6vw,84px);color:#fff;margin-top:12px}
+.pd-hi h1{font-size:clamp(32px,6.6vw,84px);color:#fff;margin-top:12px}
 .pd-hi .tag{color:rgba(255,255,255,.8);font-size:clamp(14px,1.6vw,19px);margin-top:10px}
 .pd-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
 .pd-meta span{padding:6px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.36);color:#fff;font-size:11px}
 .pd-body{max-width:1160px;margin:0 auto;padding:clamp(32px,5vw,60px) clamp(18px,4vw,44px) clamp(56px,8vw,110px);display:grid;gap:clamp(34px,5vw,64px)}
 .pd-sec{display:grid;gap:16px}
-.pd-sec > h3{font-size:clamp(18px,2.1vw,25px);display:flex;align-items:center;gap:14px}
-.pd-sec > h3::after{content:"";flex:1;height:1px;background:var(--pln)}
+.pd-sec > h2{font-size:clamp(18px,2.1vw,25px);display:flex;align-items:center;gap:14px}
+.pd-sec > h2::after{content:"";flex:1;height:1px;background:var(--pln)}
 .pd-sec p{color:var(--pmut);font-size:16px;max-width:74ch}
 .pd-q{border-left:2px solid var(--pa);padding-left:18px;color:var(--pfg)!important;font-size:clamp(17px,1.9vw,21px)!important;max-width:60ch!important;line-height:1.5}
 .pd-ch{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:12px}
@@ -352,7 +352,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 max(46px,calc(env(safe-ar
 .pdc:hover{transform:translateY(-3px);border-color:var(--pa)}
 .pdc img{width:100%;aspect-ratio:16/10;object-fit:cover}
 .pdc .n{padding:13px 15px 15px;display:grid;gap:4px}
-.pdc h4{font-size:16px;color:var(--pfg)}
+.pdc h3{font-size:16px;color:var(--pfg)}
 .pdc .d{color:var(--pmut);font-size:13px;line-height:1.5}
 .pd-v{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
 .pdv{border:1px solid var(--pln);border-radius:18px;padding:18px;background:var(--pbg2);display:grid;gap:6px;align-content:start}

@@ -199,8 +199,10 @@ ko'chirilmagan** — ton saqlanib, yorqinlik ekranda o'qilishi uchun sozlangan.
 Logo sarig'i yorug' fonda 1,15:1 beradi, ya'ni ko'rinmaydi.
 
 `src/styles/global.css` ning boshidagi 397 qator — eski `index.html` dan
-**o'zgarishsiz** ko'chirilgan. Oxirida alohida belgilangan qo'shimcha blok bor
-(til almashtirgich, `<img>` bo'lgan hero, futer havolasi, loyiha sahifasi).
+ko'chirilgan; faqat 4 ta sarlavha selektori bir pog'ona ko'tarilgan
+(`.pd-hi h1`, `.pd-sec > h2`, `.pdc h3` — loyiha sahifasida `h1` bo'lishi uchun,
+`AGENTS.md` §4). Oxirida alohida belgilangan qo'shimcha blok bor (til
+almashtirgich, `<img>` bo'lgan hero, futer havolasi, loyiha sahifasi).
 Qo'shimcha blokda yangi rang, yangi shrift pog'onasi va yangi oltin yo'q.
 
 ### Tokenlar

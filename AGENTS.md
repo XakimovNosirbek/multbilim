@@ -45,7 +45,10 @@ turadi. Uni «yaxshilash» kerak emas.
 
 `src/styles/global.css` **ikki qismdan** iborat:
 
-1. 1–397 qator — eski `index.html` dan **o'zgarishsiz** ko'chirilgan
+1. 1–397 qator — eski `index.html` dan ko'chirilgan. **Faqat 4 ta selektor**
+   o'zgargan: loyiha sahifasida sarlavha darajalari bir pog'ona ko'tarildi
+   (`.pd-hi h1`, `.pd-sec > h2`, `.pd-sec > h2::after`, `.pdc h3`) — sabab §4 da.
+   Deklaratsiyalar o'zgarmagan
 2. oxiridagi `═══` bilan belgilangan blok — Astro'ga ko'chirishda qo'shilgan
 
 Qo'shimcha blokda yangi rang, yangi shrift pog'onasi va yangi oltin **yo'q**. Shu
@@ -104,6 +107,12 @@ bo'lmasin** — iOS Safari fokusda sahifani kattalashtiradi va layout buziladi.
 
 ## 4. Buzilmasligi kerak bo'lgan a11y invariantlari
 
+- **Har sahifada aynan bitta `<h1>`, daraja sakramaydi.** Eski versiyada loyiha
+  tafsiloti modal edi va sahifaning `h1` i hero'da turardi, shuning uchun modal
+  ichida `h2 → h3 → h4` ishlatilgan. Alohida sahifada `h1` yo'q qolardi —
+  shu sababli loyiha sahifasida darajalar bir pog'ona ko'tarilgan:
+  `h1` (loyiha nomi) → `h2` (bo'lim) → `h3` (qahramon). CSS selektorlari ham
+  shunga moslangan. Tekshiruv: §5 dagi sarlavha skripti
 - Teginish nishoni: interaktiv element **≥ 24×24px** (WCAG 2.5.8), shapka
   tugmalari 44×44, til almashtirgich 30×51 (mobil menyuda 44×44)
 - Forma maydoni ≥ 16px
@@ -163,6 +172,23 @@ for f in glob.glob('dist/**/*.html', recursive=True):
     if miss: print(f'{f} yechilmagan anchor: {miss}')
     n = len(re.findall(r'<img(?![^>]*\salt[=\s>])[^>]*>', h))
     if n: print(f'{f} altsiz img: {n}')
+```
+
+### Sarlavha ierarxiyasi
+
+Har sahifada bitta `h1` va daraja sakramasligi kerak (futerdagi `.fcols h4`
+sakrashi eski versiyadan meros — u hisobga olinmaydi).
+
+```python
+import glob, io, os, re, sys
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+for p in sorted(glob.glob('dist/**/*.html', recursive=True)):
+    if '/html/' in p.replace(os.sep, '/'): continue
+    h = re.sub(r'<script.*?</script>', ' ', io.open(p, encoding='utf-8').read(), flags=re.S)
+    lv = [int(m.group(1)) for m in re.finditer(r'<h([1-6])[\s>]', h)]
+    skips = [(lv[i], lv[i+1]) for i in range(len(lv)-1) if lv[i+1]-lv[i] > 1 and lv[i+1] != 4]
+    if lv.count(1) != 1 or skips:
+        print(f'MUAMMO {p}: h1={lv.count(1)} sakrash={skips}')
 ```
 
 ### Tarjima to'liqligi

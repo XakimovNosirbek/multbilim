@@ -62,7 +62,7 @@ const delay = () => `animation-delay:${70 + step++ * 85}ms`;
       />
       <div class="pd-hi st" style={delay()}>
         <span class="g">{pick(p.genre, lang)}</span>
-        <h2>{pick(p.title, lang)}</h2>
+        <h1>{pick(p.title, lang)}</h1>
         <p class="tag">{pick(p.tagline, lang)}</p>
         <div class="pd-meta">
           {p.badges.map((b) => <span>{pick(b, lang)}</span>)}
@@ -79,7 +79,7 @@ const delay = () => `animation-delay:${70 + step++ * 85}ms`;
       {
         p.sections.map((sec) => (
           <div class="pd-sec st" style={delay()}>
-            <h3>{pick(sec.title, lang)}</h3>
+            <h2>{pick(sec.title, lang)}</h2>
             {sec.paragraphs?.map((par) => <p>{pick(par, lang)}</p>)}
             {sec.quote && <p class="pd-q">{pick(sec.quote, lang)}</p>}
             {sec.characters && (
@@ -97,7 +97,7 @@ const delay = () => `animation-delay:${70 + step++ * 85}ms`;
                       decoding="async"
                     />
                     <div class="n">
-                      <h4>{pick(ch.name, lang)}</h4>
+                      <h3>{pick(ch.name, lang)}</h3>
                       <span class="d">{pick(ch.desc, lang)}</span>
                     </div>
                   </div>

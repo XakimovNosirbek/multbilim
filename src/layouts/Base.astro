@@ -22,6 +22,7 @@ interface Props {
 }
 
 const { lang, path = '', title, description, ogImage, jsonLd = [], noindex } = Astro.props;
+const ogLocale: Record<Lang, string> = { uz: 'uz_UZ', ru: 'ru_RU', en: 'en_US' };
 const t = useTranslations(lang);
 const canonical = absPath(lang, path);
 const ogDefault = await getImage({ src: ogFallback, width: 1200, format: 'jpg' });
@@ -47,6 +48,8 @@ const og = ogImage ?? new URL(ogDefault.src, Astro.site).href;
     {!noindex && <link rel="alternate" hreflang="x-default" href={absPath('uz', path)} />}
     <link rel="sitemap" href={assetPath('sitemap-index.xml')} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MultBilim" />
+    <meta property="og:locale" content={ogLocale[lang]} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={og} />

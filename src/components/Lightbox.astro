@@ -44,9 +44,11 @@ const t = useTranslations(lang);
     if (!group.length || !lbi) return;
     index = (i + group.length) % group.length;
     const el = group[index];
-    // galereya rasmi optimizatsiyalangan — ko'rgich ham shu srcset'dan oladi
+    // `currentSrc` — brauzer <picture> dan tanlagan aynan o'sha fayl (AVIF).
+    // `srcset` ni ham berib qo'ysak, brauzer fallback WebP ni qaytadan
+    // yuklaydi; shuning uchun srcset bo'sh qoladi va kesh ishlatiladi.
+    lbi.srcset = '';
     lbi.src = el.currentSrc || el.src;
-    lbi.srcset = el.srcset;
     lbi.alt = el.alt || '';
     if (lbc) lbc.textContent = el.alt || '';
     const many = group.length > 1;
