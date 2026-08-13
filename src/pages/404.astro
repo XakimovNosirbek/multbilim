@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+import { defaultLang } from '../i18n/ui';
+import { path as localePath, useTranslations } from '../i18n/utils';
+
+/**
+ * GitHub Pages barcha topilmagan manzillarga faqat ildizdagi `404.html` ni
+ * beradi, shuning uchun sahifa asosiy tilda. Boshqa tilga o'tish shapkadagi
+ * (mobilda menyudagi) til almashtirgichi orqali.
+ */
+const lang = defaultLang;
+const t = useTranslations(lang);
+---
+
+<Base lang={lang} title={`404 — MultBilim`} description={t('nf.lede')} noindex>
+  <section id="top">
+    <div class="wrap">
+      <span class="eyebrow mono">{t('nf.code')}</span>
+      <h1 class="big">{t('nf.h')}</h1>
+      <p class="lede">{t('nf.lede')}</p>
+      <div class="hero-cta">
+        <a class="btn btn-solid" href={localePath(lang)}>{t('nf.home')}</a>
+        <a class="btn btn-ghost" href={`${localePath(lang)}#loyihalar`}>{t('nav.projects')}</a>
+      </div>
+    </div>
+  </section>
+</Base>

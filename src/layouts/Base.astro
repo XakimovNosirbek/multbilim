@@ -17,9 +17,11 @@ interface Props {
   /** Absolyut URL. Berilmasa — bosh muqova. */
   ogImage?: string;
   jsonLd?: Record<string, unknown>[];
+  /** 404 uchun: canonical va hreflang berilmaydi, indekslash taqiqlanadi */
+  noindex?: boolean;
 }
 
-const { lang, path = '', title, description, ogImage, jsonLd = [] } = Astro.props;
+const { lang, path = '', title, description, ogImage, jsonLd = [], noindex } = Astro.props;
 const t = useTranslations(lang);
 const canonical = absPath(lang, path);
 const ogDefault = await getImage({ src: ogFallback, width: 1200, format: 'jpg' });
@@ -36,13 +38,13 @@ const og = ogImage ?? new URL(ogDefault.src, Astro.site).href;
     <meta name="theme-color" content="#060912" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)" />
     <link rel="icon" href={assetPath('favicon.svg')} type="image/svg+xml" />
-    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
     {
-      alternates(path).map((a) => (
-        <link rel="alternate" hreflang={a.lang} href={a.href} />
-      ))
+      !noindex &&
+        alternates(path).map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)
     }
-    <link rel="alternate" hreflang="x-default" href={absPath('uz', path)} />
+    {!noindex && <link rel="alternate" hreflang="x-default" href={absPath('uz', path)} />}
     <link rel="sitemap" href={assetPath('sitemap-index.xml')} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />

@@ -21,8 +21,8 @@ export default defineConfig({
         defaultLocale: 'uz',
         locales: { uz: 'uz-UZ', ru: 'ru-RU', en: 'en-US' },
       },
-      // eski bir fayllik versiya indekslanmasin
-      filter: (page) => !page.includes('/html/'),
+      // eski bir fayllik versiya va 404 indekslanmasin
+      filter: (page) => !page.includes('/html/') && !page.includes('/404'),
     }),
   ],
 });

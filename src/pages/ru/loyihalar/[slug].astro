@@ -1,0 +1,10 @@
+---
+import ProjectPage from '../../../components/ProjectPage.astro';
+import { projectPaths } from '../../../data/projects';
+
+export const getStaticPaths = () => projectPaths('ru');
+
+const { lang, entry, prev, next } = Astro.props;
+---
+
+<ProjectPage lang={lang} entry={entry} prev={prev} next={next} />
