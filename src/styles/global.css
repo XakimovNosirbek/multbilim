@@ -420,7 +420,12 @@ footer{border-top:1px solid var(--line);padding:44px 0 max(46px,calc(env(safe-ar
 .fend{display:flex;gap:16px;flex-wrap:wrap}
 .fbot a{display:inline-block;padding:12px 0;margin:-12px 0}
 
-/* loyiha endi modal emas, alohida sahifa: ro'yxatga qaytish havolasi */
+/* loyiha endi modal emas, alohida sahifa.
+   `.pd` — <section>, ya'ni global section padding'ini oladi. Modal ichida
+   shapka yo'q edi va yuqoridagi ~115px bo'shliq mantiqan to'g'ri edi;
+   sahifada esa shapka bilan qo'shilib ikki marta bo'shliq bo'lib qolardi. */
+.pd{padding-top:0}
+/* ro'yxatga qaytish havolasi */
 .pd-back{justify-self:start;display:inline-flex;align-items:center;gap:8px;
   color:var(--pmut);font-size:13px;padding:12px 0;margin:-12px 0}
 .pd-back:hover{color:var(--pa)}
