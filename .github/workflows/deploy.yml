@@ -19,7 +19,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      # v4 Node 20 da ishlaydi, u esa runner'larda eskirgan deb belgilangan
+      - uses: actions/checkout@v5
       # npm ci + astro build + upload-pages-artifact ni o'zi bajaradi.
       # `cache: true` (standart) node_modules/.astro ni keshlaydi —
       # optimizatsiya qilingan rasmlar har build'da qaytadan chizilmaydi.
