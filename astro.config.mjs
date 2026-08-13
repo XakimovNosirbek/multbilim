@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import pruneUnusedAssets from './prune-unused-assets.mjs';
 
 // GitHub Pages sayti /multbilim/ ost-yo'lida turadi.
 // `base` ni olib tashlash — barcha havola va rasm yo'llarini 404 qiladi.
@@ -24,5 +25,6 @@ export default defineConfig({
       // eski bir fayllik versiya va 404 indekslanmasin
       filter: (page) => !page.includes('/html/') && !page.includes('/404'),
     }),
+    pruneUnusedAssets(),
   ],
 });

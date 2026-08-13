@@ -31,7 +31,7 @@ const t = useTranslations(lang);
             sizes="100vw"
             alt=""
             loading={i === 0 ? 'eager' : 'lazy'}
-            fetchpriority={i === 0 ? 'high' : undefined}
+            fetchpriority={i === 0 ? 'high' : 'low'}
             decoding={i === 0 ? undefined : 'async'}
           />
         </div>
