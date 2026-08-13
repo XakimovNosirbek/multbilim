@@ -1,5 +1,8 @@
 # Topshiriq: MultBilim saytini Astro'ga ko'chirish
 
+> **BAJARILDI (2026-08-13).** Ko'chirish tugadi — hozirgi holat va qoidalar
+> `README.md` va `AGENTS.md` da. Bu fayl topshiriq matni sifatida arxivda qoladi.
+
 Bu fayl yangi sessiya uchun to'liq topshiriq. Sessiya sovuqdan boshlanadi —
 avval `AGENTS.md` va `README.md` ni **to'liq o'qing**, ularda dizayn tizimi,
 tekshirish skriptlari va muhit tuzoqlari bor.

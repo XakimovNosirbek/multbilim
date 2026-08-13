@@ -1,8 +1,10 @@
 # MultBilim — studiya sayti
 
-O'zbekistondagi **MultBilim** animatsiya studiyasi uchun bir sahifali sayt.
+O'zbekistondagi **MultBilim** animatsiya studiyasi uchun sayt. **Astro**, uch tilda,
+statik chiqish.
 
 **Jonli:** https://xakimovnosirbek.github.io/multbilim/
+**Oldingi (bir fayllik) versiya:** https://xakimovnosirbek.github.io/multbilim/html/
 
 > **Holat: prototip.** Loyiha tasvirlari va tavsiflari studiyaning haqiqiy taqdimot
 > hujjatlaridan olingan. Jamoa ismlari, vakansiyalar, aloqa manzillari va ba'zi
@@ -13,23 +15,41 @@ O'zbekistondagi **MultBilim** animatsiya studiyasi uchun bir sahifali sayt.
 
 ## Nima bu
 
-Statik sayt. **Build bosqichi yo'q, bog'liqliklar yo'q, paket menejeri yo'q.**
-`index.html` — bitta fayl, ichida butun CSS va JS. GitHub Pages uni to'g'ridan-to'g'ri
-`main` branchdan beradi.
+Astro loyihasi. Build natijasi — 22 ta statik HTML: uch tilda bosh sahifa va 6 ta
+loyiha sahifasi, plus 404. Server tomoni yo'q, JavaScript faqat interaktiv
+elementlar uchun (tema, slayder, video, akkordeon, rasm ko'rgich) va u HTML ichiga
+inline qo'yiladi.
 
-Nega shunday: sayt vaqtinchalik, studiya egalariga ko'rsatish uchun. Build quvuri
-qo'shish uni tezlashtirmaydi, faqat murakkablashtiradi. Doimiy versiya uchun
-[Keyingi bosqich](#keyingi-bosqich) ga qarang.
+`public/html/` ichidagi **eski bir fayllik versiya** o'zgarishsiz saqlanadi va
+`/multbilim/html/` da ochiladi — taqqoslash va zaxira uchun. **Uning kodiga
+tegilmaydi**, unga eski qoidalar amal qiladi (build yo'q, bitta fayl, nisbiy yo'llar).
 
-### O'lchamlar
+### Nima o'zgardi
 
-| | |
-|---|---|
-| `index.html` | ~75 KB (CSS va JS ichida) |
-| Rasmlar | 49 ta fayl, ~4 MB |
-| Veb-shrift | **yo'q** — tizim shrifti ishlatiladi |
-| Tashqi so'rov | faqat YouTube (preview rasmi + pleer) |
-| Yuklanish | ~0,65 s |
+| | Eski versiya | Hozir |
+|---|---|---|
+| Takrorlanuvchi blok | 91 ta qo'lda | komponent + ma'lumot fayli |
+| Loyiha manzili | yo'q (modal) | `/loyihalar/alpomish` — ulashiladi, indekslanadi |
+| Tillar | faqat uz | `uz` · `/ru/` · `/en/`, har biri alohida HTML |
+| Rasm | 49 JPEG, bitta o'lchamda | AVIF + WebP, `srcset` bilan |
+| Bosh sahifa rasm yuki | 1,07 MB | **331 KB** (mobil) / **702 KB** (desktop) |
+| sitemap · robots · JSON-LD | yo'q | bor |
+
+O'lchov `dist` ustida, DPR = 1. Loyiha sahifasi 151–262 KB (html + css + js + rasm).
+
+---
+
+## Ishga tushirish
+
+```bash
+npm install
+npm run dev        # http://localhost:4321/multbilim/
+npm run build      # -> dist/
+npm run preview    # dist/ ni serverdan beradi
+npm run check      # astro check: tip xatolari
+```
+
+`base` `/multbilim` bo'lgani uchun dev serverda ham manzil ost-yo'lda.
 
 ---
 
@@ -37,20 +57,32 @@ qo'shish uni tezlashtirmaydi, faqat murakkablashtiradi. Doimiy versiya uchun
 
 ```
 multbilim/
-├─ index.html      butun sayt: markup + CSS + JS
-├─ favicon.svg     ko'k kvadrat, MULT/BILIM harflari
-├─ .nojekyll       GitHub Pages Jekyll'ni o'tkazib yuborsin
-├─ README.md       shu fayl
-├─ AGENTS.md       AI agentlar uchun ish qoidalari
-└─ img/            49 ta rasm, PDF taqdimotlardan ajratilgan
-   ├─ cov-*.jpg    6 ta loyiha muqovasi (1400px)
-   ├─ a-*.jpg      Alpomish personajlari
-   ├─ i-*.jpg      Ikki Dunyo personajlari
-   ├─ z-*.jpg      Zij personajlari va kadrlari
-   ├─ m-*.jpg      Megavoylar personajlari
-   ├─ q-*.jpg      Sehrli Qalpoqcha personajlari
-   ├─ v-*.jpg      Meva-Cheva personajlari
-   └─ st-*.jpg     umumiy kadrlar (portal, rasadxona, jamoa...)
+├─ astro.config.mjs           site + base:'/multbilim', i18n, sitemap
+├─ prune-unused-assets.mjs    build oxirida havolasiz rasmlarni o'chiradi
+├─ .github/workflows/deploy.yml
+├─ public/
+│  ├─ favicon.svg  robots.txt  .nojekyll
+│  └─ html/                    ← ESKI VERSIYA (o'zgarishsiz)
+│     ├─ index.html            butun sayt: markup + CSS + JS
+│     └─ img/                  49 rasm
+└─ src/
+   ├─ assets/img/              49 rasm — astro:assets optimizatsiya qiladi
+   ├─ content/projects/*.md    6 loyiha (frontmatter, zod bilan tekshiriladi)
+   ├─ content.config.ts        loyiha sxemasi
+   ├─ data/                    videos, services, process, tech, team,
+   │                           careers, faq, stats, contact, site, projects
+   ├─ i18n/{ui.ts, utils.ts}   interfeys matnlari va yo'l yasovchilar
+   ├─ layouts/Base.astro       <head>, shapka, futer, hreflang, JSON-LD
+   ├─ components/              Header, MobileNav, LangSwitch, Hero,
+   │                           ProjectCard, VideoCard, Card, TeamMember,
+   │                           Row, Faq, ContactForm, Footer, Lightbox,
+   │                           SectionHead, Home, ProjectPage
+   ├─ styles/global.css        barcha tokenlar va CSS
+   └─ pages/
+      ├─ index.astro           uz bosh sahifa
+      ├─ loyihalar/[slug].astro
+      ├─ ru/… va en/…          o'sha ikkisining tarjimasi
+      └─ 404.astro
 ```
 
 ### Sahifa bo'limlari
@@ -58,64 +90,105 @@ multbilim/
 | Anchor | Bo'lim |
 |---|---|
 | `#top` | Bosh ekran — 6 ta muqova aylanadi |
-| `#studiya` | Studio manifesti — «Animatsiya bu chizish emas» |
+| `#studiya` | Studio manifesti |
 | `#loyihalar` | 6 ta loyiha kartochkasi + statistika |
 | `#tomosha` | Efirdagi 2 serial, 8 ta ichki video pleer |
-| `#xizmatlar` | 5 ta xizmat |
-| `#jarayon` | 5 bosqich |
-| `#texnologiya` | 4 ta pipeline yo'nalishi |
-| `#jamoa` | 4 kishi (namunaviy) |
-| `#karyera` | 5 vakansiya (namunaviy) |
-| `#savollar` | 6 savol-javob, akkordeon |
-| `#aloqa` | Forma + bo'limlar |
-
-Har loyiha kartochkasi bosilganda **to'liq ekranli ichki sahifa** ochiladi
-(`#pd-alpomish`, `#pd-ikkidunyo`, `#pd-zij`, `#pd-megavoylar`, `#pd-qalpoqcha`,
-`#pd-mevacheva`) — har biri o'z rang uslubida.
+| `#xizmatlar` · `#jarayon` · `#texnologiya` | 5 + 5 + 4 karta |
+| `#jamoa` · `#karyera` | 4 kishi + 5 vakansiya (namunaviy) |
+| `#savollar` · `#aloqa` | akkordeon + forma |
 
 ---
 
-## Lokal ishga tushirish
+## Kontent qanday o'zgartiriladi
 
-`file://` bilan ochsangiz ham ishlaydi, lekin to'g'ri tekshirish uchun HTTP server:
+### Matn
+
+Interfeys matnlari — `src/i18n/ui.ts`. Uchta blok bor: `uz` (manba), `ru`, `en`.
+`ru` va `en` `Record<UiKey, string>` bo'lgani uchun **kalitni tushirib qoldirsangiz
+`npm run check` tip xatosi beradi** — tarjima jimgina yo'qolmaydi.
+
+Bo'lim ichidagi ma'lumot — `src/data/*.ts`. Har matn uch tilli:
+
+```ts
+title: { uz: "Ovoz va musiqa", ru: "Звук и музыка", en: "Sound and music" },
+```
+
+`i18n-seed.json` — 400 juftlik tarjima urug'i (`{"<uzbek>": ["<rus>", "<ingliz>"]}`),
+oldingi versiyadan qolgan. Yangi matn qo'shsangiz shu yerda qidirib ko'ring.
+
+### Yangi loyiha
+
+`src/content/projects/<slug>.md` yarating. Sxema — `src/content.config.ts`; uch tilning
+uchtasi ham majburiy, `palette` esa `global.css` dagi `.pd[data-pal="…"]` bloklaridan
+biri bo'lishi kerak. Bo'lim ichidagi tartib qat'iy:
+
+```
+paragraflar → sitata → qahramonlar → qadriyatlar → galereya
+```
+
+Yangi palitra kerak bo'lsa, `global.css` ga `.pd[data-pal="x"]{--pa:…;--pbg:…;--pbg2:…;
+--pfg:…;--pmut:…;--pln:…}` qo'shib, sxemadagi `z.enum` ga nom qo'shing. Loyiha
+avtomatik ravishda bosh sahifa kartochkasiga, hero slayderiga, sitemapga va
+oldingi/keyingi halqasiga tushadi.
+
+### Rasm
+
+`src/assets/img/` ga qo'ying va `.md` frontmatter'ida nisbiy yo'l bilan ko'rsating
+(`../../assets/img/x.jpg`). `alt` uch tilda majburiy. **`public/` ga qo'ymang** — u
+yerdagi rasm optimizatsiya qilinmaydi.
+
+Manba o'lchamlari: muqova 1400px, personaj varag'i 860px, kadr 1000–1100px.
+`widths` shundan oshmasin, aks holda cho'zilib xiralashadi.
+
+### Video
+
+`src/data/videos.ts` da `yt` (video ID), sarlavha va ko'rish soni. Ko'rish sonini
+**taxmin qilmang** — kanallarning ochiq RSS'idan qayta oling:
 
 ```bash
-cd multbilim
-python -m http.server 8000
-# → http://localhost:8000
+curl -s "https://www.youtube.com/feeds/videos.xml?channel_id=UC-wrA-QvS7dwDO-bZZzDmPw"  # Bek va Lola
+curl -s "https://www.youtube.com/feeds/videos.xml?channel_id=UCTKIXsv9PijMNmUZ8iPC7Lg"  # Yashil makon
 ```
+
+Preview `i.ytimg.com/vi/<ID>/maxresdefault.jpg` (1280×720), HD yo'q bo'lsa `onerror`
+orqali `hqdefault.jpg` ga tushadi. **`hqdefault` ni asosiy qilmang** — u 480×360 va
+retinada xira. Pleer `youtube-nocookie.com` orqali va faqat bosilganda yuklanadi.
 
 ---
 
 ## Deploy
 
-`main` branchga push qilish yetarli. GitHub Pages avtomatik qayta quradi (~30 soniya).
+`main` ga push → GitHub Actions (`withastro/action`) quradi va Pages'ga chiqaradi.
+Pages manbasi **workflow** (avvalgi «`main` branch root» emas).
 
 ```bash
-git add -A
-git commit -m "O'zgarish tavsifi"
 git push origin main
-```
-
-Tekshirish:
-
-```bash
+gh run watch                                        # build jarayoni
 gh api repos/XakimovNosirbek/multbilim/pages/builds/latest --jq '.status'
-curl -s -o /dev/null -w "%{http_code}\n" https://xakimovnosirbek.github.io/multbilim/
+for p in "" ru/ en/ loyihalar/alpomish/ html/; do
+  curl -s -o /dev/null -w "$p %{http_code}\n" "https://xakimovnosirbek.github.io/multbilim/$p"
+done
 ```
+
+`base: '/multbilim'` ni olib tashlash butun saytni 404 qiladi. `package-lock.json`
+commit qilinadi — `npm ci` shuni talab qiladi.
+
+### Chiqish hajmi haqida
+
+`dist/` ~14 MB, lekin foydalanuvchi bunchani yuklamaydi:
+
+- ~4,2 MB — `public/html/` dagi eski versiya (zaxira)
+- ~9 MB — AVIF (2,3 MB) va WebP (6,7 MB) variantlar barcha nuqtalar uchun; brauzer
+  bittasini oladi
+- asl JPEG'lar `prune-unused-assets.mjs` tomonidan o'chiriladi: Vite ularni content
+  collection importi tufayli chiqaradi, lekin hech kim havola qilmaydi (49 fayl, 4 MB)
 
 ### Muhim: repozitoriy ochiq bo'lishi shart
 
 Bepul GitHub akkauntida Pages **faqat ochiq (public)** repodan ishlaydi. Ya'ni hali
-chiqmagan loyihalarning konsept materiallari internetda ochiq turadi.
-
-Ko'rsatib bo'lgach:
-
-```bash
-gh repo delete XakimovNosirbek/multbilim --yes
-```
-
-Privat saqlash kerak bo'lsa — GitHub Pro (~$4/oy).
+chiqmagan loyihalarning konsept materiallari internetda ochiq turadi. Ko'rsatib
+bo'lgach: `gh repo delete XakimovNosirbek/multbilim --yes`. Privat kerak bo'lsa —
+GitHub Pro (~$4/oy).
 
 ---
 
@@ -124,6 +197,11 @@ Privat saqlash kerak bo'lsa — GitHub Pro (~$4/oy).
 Ranglar logotipdan olingan (ko'k `#3774EA`, sariq `#FDE05A`), lekin **hex nusxa
 ko'chirilmagan** — ton saqlanib, yorqinlik ekranda o'qilishi uchun sozlangan.
 Logo sarig'i yorug' fonda 1,15:1 beradi, ya'ni ko'rinmaydi.
+
+`src/styles/global.css` ning boshidagi 397 qator — eski `index.html` dan
+**o'zgarishsiz** ko'chirilgan. Oxirida alohida belgilangan qo'shimcha blok bor
+(til almashtirgich, `<img>` bo'lgan hero, futer havolasi, loyiha sahifasi).
+Qo'shimcha blokda yangi rang, yangi shrift pog'onasi va yangi oltin yo'q.
 
 ### Tokenlar
 
@@ -160,8 +238,6 @@ skript bor.
 
 ### Oltin faqat 6 joyda
 
-Kam ishlatilgani uchun kuchli. Yangi oltin qo'shsangiz, u ta'kid bo'lishdan to'xtaydi:
-
 1. `.logo .mark::after` — logotipdagi nuqta
 2. `.logo .l1` — MULT so'zi
 3. `.hero h1 span:nth-child(2)` — bosh sarlavhadagi bitta so'z
@@ -173,30 +249,10 @@ Boshqa hamma joyda **ko'k**.
 
 ### Tipografika
 
-Veb-shrift yo'q — `ui-sans-serif, system-ui`. Har OS o'z shriftini beradi
-(macOS: SF Pro, Windows: Segoe UI, Android: Roboto). 122 KB tejaydi, matn darrov chiqadi.
-
-**Shkala — 8 pog'ona, boshqa qiymat qo'shilmaydi:**
-
-```
-11px  micro yorliqlar
-12px  eyebrow, k-yorliqlar
-13px  kichik matn, meta
-14px  ikkilamchi matn
-16px  forma maydonlari (iOS zoom chegarasi)
-17px  asosiy matn
-19px  kichik sarlavha
-22px  logotip
-```
-
-Katta sarlavhalar `clamp()` bilan.
-**Qatorlar orasi:** `.86` `1` `1.06` (display), `1.3` `1.5` `1.6` (matn).
-**Matn kengligi:** 45–75 belgi, eng uzuni 78ch.
-
-### Bo'shliq
-
-4pt shkalasiga yaqin: `4 · 6 · 8 · 10 · 12 · 14 · 16 · 18 · 24 · 28 · 40`.
-`1px` va `2px` faqat hairline chegaralar uchun.
+Veb-shrift yo'q — `ui-sans-serif, system-ui`. **Shkala — 8 pog'ona, boshqa qiymat
+qo'shilmaydi:** `11 · 12 · 13 · 14 · 16 · 17 · 19 · 22` (+ katta sarlavhalar `clamp()`).
+Forma maydonlari 16px — iOS Safari fokusda sahifani kattalashtirmaydi.
+**Bo'shliq:** `4 · 6 · 8 · 10 · 12 · 14 · 16 · 18 · 24 · 28 · 40`.
 
 ---
 
@@ -204,15 +260,15 @@ Katta sarlavhalar `clamp()` bilan.
 
 Quyidagilar sinovdan o'tgan va **buzilmasligi kerak**:
 
-- Teginish nishonlari: shapka tugmalari 44×44, slayd nuqtalari 24×24 (WCAG 2.5.8)
-- Forma maydonlari 16px — iOS Safari fokusda sahifani kattalashtirmaydi
-- `:focus-visible` — klaviatura bilan yurish ko'rinadi
-- `prefers-reduced-motion` — barcha animatsiya o'chadi
-- Skip-link — menyuni aylanib o'tish
-- 49 ta rasmning hammasida `alt`
+- Teginish nishonlari: shapka tugmalari 44×44, slayd nuqtalari 24×24 (WCAG 2.5.8),
+  til almashtirgich 30×51 (mobilda menyu ichida 44×44)
+- Forma maydonlari 16px · `:focus-visible` · `prefers-reduced-motion` · skip-link
+- Barcha rasmda `alt` (hero slaydlari bezak — `aria-hidden` konteyner ichida bo'sh `alt`)
 - Rang yagona signal emas — faol slayd nuqtasi **kengligi** bilan ham ajraladi
-- Modal va lightbox: `Esc`, fokus qaytishi, `aria-modal`
-- Lightbox'da `←` `→` klavishlari
+- Mobil menyu: orqa fon `inert` + `aria-hidden`, `Esc` yopadi
+- Rasm ko'rgich: `Esc`, fokus qaytishi, `aria-modal`, Tab halqasi, `←` `→`
+- `minmax(min(320px,100%),1fr)` — 320px ekranda toshmaydi
+- `env(safe-area-inset-*)` 7 joyda, `viewport-fit=cover` bilan birga
 
 ---
 
@@ -232,8 +288,6 @@ so'ng web uchun siqilgan (progressive JPEG):
 | SehirliQalpoqcha.pdf | 12 | muqova + 6 personaj + 2 kadr |
 | MevaCheva.pdf | 24 | muqova + 5 personaj + 2 kadr |
 
-Muqovalar 1400px / sifat 74 · personaj varaqlari 860px / 68 · kadrlar 1000–1100px / 70–72.
-
 ```python
 import pymupdf
 from PIL import Image
@@ -241,25 +295,17 @@ doc = pymupdf.open("Alpomish.pdf"); p = doc[0]
 m = pymupdf.Matrix(1400/p.rect.width, 1400/p.rect.width)
 pix = p.get_pixmap(matrix=m)
 Image.frombytes('RGB', (pix.width, pix.height), pix.samples) \
-     .save("img/cov-alpomish.jpg", quality=74, optimize=True, progressive=True)
+     .save("src/assets/img/cov-alpomish.jpg", quality=74, optimize=True, progressive=True)
 ```
+
+Bir xil rasm ikki joyda turadi: `src/assets/img/` (yangi sayt, optimizatsiya qilinadi)
+va `public/html/img/` (eski versiya, o'zgarishsiz). Eski versiya nisbiy yo'l bilan
+o'qigani uchun boshqa yo'l yo'q.
 
 ### YouTube raqamlari
 
 Ikki kanalning **ochiq RSS** feed'idan olingan (2026-08-12). Har kanalning
 **oxirgi 15 chiqishi** qamrab olingan — kanal jami undan yuqori.
-
-```bash
-curl -s "https://www.youtube.com/feeds/videos.xml?channel_id=UC-wrA-QvS7dwDO-bZZzDmPw"  # Bek va Lola
-curl -s "https://www.youtube.com/feeds/videos.xml?channel_id=UCTKIXsv9PijMNmUZ8iPC7Lg"  # Yashil makon
-```
-
-Preview rasmlari `i.ytimg.com/vi/<ID>/maxresdefault.jpg` (1280×720). Agar video HD
-yuklanmagan bo'lsa `onerror` orqali `hqdefault.jpg` ga tushadi. **`hqdefault` ni
-asosiy qilib qo'ymang** — u 480×360 va retina ekranda xira ko'rinadi.
-
-Pleer `youtube-nocookie.com` orqali va faqat bosilganda yuklanadi: sahifa ochilishida
-8 ta iframe ~2 MB bo'lardi, hozir esa faqat preview rasmi.
 
 ---
 
@@ -267,36 +313,39 @@ Pleer `youtube-nocookie.com` orqali va faqat bosilganda yuklanadi: sahifa ochili
 
 | Nima | Qayerda | Nima kerak |
 |---|---|---|
-| Jamoa (4 ism) | `#jamoa` | Haqiqiy ismlar, lavozimlar, portretlar |
-| Vakansiyalar (5 ta) | `#karyera` | Ochiq o'rinlar bor-yo'qligi |
-| Email manzillar | `#aloqa`, footer | `@multbilim.uz` — haqiqiy domen |
-| «40+ ijodiy mutaxassis» | statistika | Aniq son |
-| Loyiha bosqichlari | kartochka meta | Qaysi biri ssenariyda / animatikda |
-| Ofis manzili | `#aloqa` | To'liq manzil, telefon |
+| Jamoa (4 ism) | `src/data/team.ts` | Haqiqiy ismlar, lavozimlar, portretlar |
+| Vakansiyalar (5 ta) | `src/data/careers.ts` | Ochiq o'rinlar bor-yo'qligi |
+| Email manzillar | `src/data/site.ts` | `@multbilim.uz` — haqiqiy domen |
+| «40+ ijodiy mutaxassis» | `src/data/stats.ts` | Aniq son |
+| Savol-javob | `src/data/faq.ts` | Studiyaning javoblari |
+| Loyiha bosqichlari | `src/content/projects/*.md` → `cardMeta`, `badges` | Qaysi biri ssenariyda / animatikda |
+| Ofis manzili | `src/i18n/ui.ts` → `contact.studio*` | To'liq manzil, telefon |
 
-Almashtirilgach «namunaviy» yozuvlarini ham olib tashlang: `.note` (2 joy),
-`.mate small` (4 joy), `#jamoa .lede`, `#karyera .lede`, footer `.fnote2`.
+Almashtirilgach «namunaviy» yozuvlarini ham olib tashlang: `ui.ts` dagi
+`projects.note`, `team.lede`, `team.placeholder`, `careers.lede`, `contact.note`,
+`footer.disclaimer`.
 
 ---
 
 ## Brauzer qo'llab-quvvatlashi
 
-Zamonaviy brauzerlar (2023+):
-`clamp()` · `aspect-ratio` · `:focus-visible` · `backdrop-filter` ·
-`grid-template-rows: 0fr→1fr` · `100svh` · `IntersectionObserver` · `localStorage`
+Zamonaviy brauzerlar (2023+): `clamp()` · `aspect-ratio` · `:focus-visible` ·
+`backdrop-filter` · `grid-template-rows: 0fr→1fr` · `100svh` ·
+`IntersectionObserver` · `localStorage` · **AVIF** (fallback WebP).
 
-JavaScript o'chirilgan bo'lsa: butun kontent ko'rinadi, faqat modal, lightbox,
-video pleer va tema tugmasi ishlamaydi.
+JavaScript o'chirilgan bo'lsa: butun kontent, uch til, barcha loyiha sahifalari va
+slayd nuqtalari ko'rinadi; faqat slayd almashishi, video pleer, akkordeon, rasm
+ko'rgich, tema tugmasi va mobil menyu ishlamaydi.
 
 ---
 
 ## Keyingi bosqich
 
-1. **Astro** ga ko'chirish — komponentlar, `astro:assets` rasm optimizatsiyasi
-2. **CMS** (Sanity yoki Payload) — xodimlar kontentni o'zi to'ldiradi, admin o'zbekcha
-3. **uz / ru / en** — Astro tug'ma i18n (`/uz/`, `/ru/`, `/en/`)
-4. **eskiz.uz VPS** — TAS-IX orqali O'zbekistonda tez ochiladi. GitHub Pages Fastly
-   CDN orqali beriladi, O'zbekistonda serveri yo'q.
-5. **Aloqa formasi** — hozir `mailto:` ochadi; server tomoni yoki Formspree kerak
+1. **CMS** (Sanity yoki Payload) — xodimlar kontentni o'zi to'ldiradi, admin o'zbekcha
+2. **eskiz.uz VPS** — TAS-IX orqali O'zbekistonda tez ochiladi. GitHub Pages Fastly
+   CDN orqali beriladi, O'zbekistonda serveri yo'q
+3. **Aloqa formasi** — hozir `mailto:` ochadi; server tomoni yoki Formspree kerak
+4. Ru/en uchun til bo'yicha manzil segmentlari (`/ru/proekty/…`) — hozir uch tilda
+   ham `loyihalar/` ishlatiladi
 
 Qarorlarning sabablari: `AGENTS.md`.
