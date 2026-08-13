@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Eski bir fayllik versiya zaxira sifatida turadi, indekslanmasin
+Disallow: /multbilim/html/
+
+Sitemap: https://xakimovnosirbek.github.io/multbilim/sitemap-index.xml
